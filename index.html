@@ -641,15 +641,23 @@
 
 <script>
 (function(){
+  // ---------- CONFIGURATION ----------
+  // 🔴 REPLACE THIS with your actual Google Apps Script Web App URL
+  const ENDPOINT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+  
   // ---------- 1. Read guest name + code from the URL ----------
   const params = new URLSearchParams(window.location.search);
-  const guest = params.get('to');
-  const code = params.get('code') || 'GUEST';
+  const guest = params.get('Name');  // ✅ Matches Apps Script: ?Name=John+Doe
+  const code = params.get('Code');   // ✅ Matches Apps Script: &Code=0001
 
+  // Fallback for old links using 'to' parameter
+  const guestName = guest || params.get('to') || 'Our Cherished Guest';
+  
   const nameOnEnvelope = document.getElementById('envGuestName');
   const nameOnWelcome = document.getElementById('guestName');
-  if (guest && guest.trim().length){
-    const clean = guest.replace(/\+/g,' ');
+  
+  if (guestName && guestName !== 'Our Cherished Guest'){
+    const clean = guestName.replace(/\+/g,' ');
     nameOnEnvelope.textContent = clean;
     nameOnWelcome.textContent = clean;
   }
@@ -667,7 +675,6 @@
     envelope.classList.add('open');
 
     // Attempt to start background music on this user gesture.
-    // Only plays if a real audio src has been set above.
     if (bgMusic.currentSrc || bgMusic.querySelector('source').src){
       bgMusic.volume = 0.35;
       bgMusic.play().then(()=>{ musicToggle.classList.add('show'); }).catch(()=>{});
@@ -677,7 +684,7 @@
       gate.classList.add('opened');
       document.body.classList.remove('locked');
       window.scrollTo(0,0);
-      logRSVP('viewed');
+      logRSVP('viewed'); // Track when guest opens the invite
     }, 1200);
   });
 
@@ -714,27 +721,32 @@
   document.getElementById('mapLink').href = 'https://maps.google.com/?q=Sunbird+Lakeshore+Salima+Malawi';
 
   // ---------- 6. RSVP logging ----------
-  // Swap ENDPOINT_URL per wedding -- that's the only thing that changes
-  // when you reuse this template for the next couple.
-  const ENDPOINT_URL = 'ENDPOINT_URL_GOES_HERE'; // e.g. https://script.google.com/macros/s/XXXXX/exec
-
   function logRSVP(status, note){
     const payload = {
-      guest: guest || 'Unknown',
-      code: code,
-      status: status,
-      note: note || '',
-      timestamp: new Date().toISOString(),
-      wedding: 'amara-joseph-2026'
+      guest: guestName,    // ✅ Matches Apps Script field: guest
+      code: code || '',    // ✅ Matches Apps Script field: code
+      status: status,      // ✅ Matches Apps Script field: status
+      note: note || '',    // ✅ Matches Apps Script field: note
+      wedding: 'amara-joseph-2026'  // ✅ Matches Apps Script field: wedding
     };
-    console.log('[RSVP EVENT]', payload);
+    
+    console.log('📨 [RSVP EVENT]', payload);
 
-    if (ENDPOINT_URL && ENDPOINT_URL.indexOf('http') === 0){
+    if (ENDPOINT_URL && ENDPOINT_URL.includes('script.google.com')){
       fetch(ENDPOINT_URL, {
-        method:'POST',
-        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        method: 'POST',
+        headers: {'Content-Type': 'text/plain;charset=utf-8'},
         body: JSON.stringify(payload)
-      }).catch(err => console.warn('RSVP send failed', err));
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('✅ RSVP sent successfully:', data);
+      })
+      .catch(err => {
+        console.warn('⚠️ RSVP send failed:', err);
+      });
+    } else {
+      console.warn('⚠️ ENDPOINT_URL not configured. Set your Apps Script URL.');
     }
   }
 
@@ -744,7 +756,7 @@
 
   document.getElementById('btnYes').addEventListener('click', ()=>{
     chosen = 'accepted';
-    statusEl.textContent = `Wonderful — we can't wait to celebrate with you, ${guest ? guest.replace(/\+/g,' ') : 'friend'}.`;
+    statusEl.textContent = `Wonderful — we can't wait to celebrate with you, ${guestName !== 'Our Cherished Guest' ? guestName.replace(/\+/g,' ') : 'friend'}.`;
     statusEl.classList.add('show');
     noteWrap.classList.add('open');
     logRSVP('accepted');
