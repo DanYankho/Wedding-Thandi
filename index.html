@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Zohan & Rose — An Invitation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Tenor+Sans&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FDFBF7;
+  --cream-deep:#F6F0E4;
+  --burgundy:#6b151e;
+  --burgundy-deep:#4a0e15;
+  --gold:#c5a059;
+  --gold-bright:#d8bc82;
+  --gold-soft:#e3cd9c;
+  --gold-dim:rgba(197,160,89,0.28);
+  --charcoal:#2c2c2c;
+  --ink-soft:rgba(44,44,44,0.62);
+  --blush:#e7c3c6;
+  --blush-soft:#f3e0e2;
+  --paper:#fffdf9;
+  --line:rgba(197,160,89,0.35);
+  --font-script:'Great Vibes', cursive;
+  --font-display:'Playfair Display', serif;
+  --font-body:'Cormorant Garamond', serif;
+  --font-label:'Tenor Sans', sans-serif;
+  --font-arabic:'Amiri', serif;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{background:#e9e2d3; font-family:var(--font-body); color:var(--charcoal); -webkit-font-smoothing:antialiased; overflow-x:hidden;}
+body.locked{overflow:hidden; height:100vh;}
+.stage{
+  max-width:500px; margin:0 auto; position:relative; min-height:100vh;
+  background:
+    radial-gradient(ellipse 120% 40% at 50% 0%, rgba(231,195,198,0.22), transparent 60%),
+    radial-gradient(ellipse 100% 40% at 50% 100%, rgba(197,160,89,0.10), transparent 60%),
+    var(--cream);
+  box-shadow:0 0 70px rgba(0,0,0,0.22);
+}
+.video-scene{position:fixed; inset:0; max-width:500px; margin:0 auto; z-index:100; background:#000; cursor:pointer; transition:opacity .8s ease;}
+.video-scene.hide{opacity:0; pointer-events:none;}
+.video-scene video{width:100%; height:100%; object-fit:cover; display:block;}
+
+section{min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:9vh 8vw; position:relative; text-align:center;}
+.eyebrow{font-family:var(--font-label); font-size:0.65rem; letter-spacing:0.4em; text-transform:uppercase; color:var(--gold); margin-bottom:1.3rem;}
+.rule{width:46px; height:1px; background:linear-gradient(90deg, transparent, var(--gold), transparent); margin:1.5rem auto; opacity:.9;}
+.rule.wide{width:96px;}
+.reveal{opacity:0; transform:translateY(24px); transition:opacity 1.1s cubic-bezier(.2,.7,.2,1), transform 1.1s cubic-bezier(.2,.7,.2,1);}
+.reveal.in{opacity:1; transform:translateY(0);}
+.reveal.d1{transition-delay:.1s;} .reveal.d2{transition-delay:.26s;} .reveal.d3{transition-delay:.42s;} .reveal.d4{transition-delay:.58s;}
+
+.guest-name{font-family:var(--font-display); font-style:italic; font-weight:500; font-size:clamp(1.9rem, 7vw, 2.6rem); color:var(--charcoal); line-height:1.25;}
+.seal-sub{margin-top:1.1rem; font-size:1rem; color:var(--ink-soft);}
+
+.names{font-family:var(--font-display); font-weight:600; font-size:clamp(2.6rem, 11vw, 4.2rem); line-height:1.05; color:var(--charcoal);}
+.names .amp{display:block; font-family:var(--font-script); font-weight:400; font-size:0.42em; color:var(--burgundy); margin:0.25em 0;}
+.together{margin-top:1.7rem; font-size:1.02rem; letter-spacing:.02em; color:var(--ink-soft); max-width:34ch;}
+.date-chip{margin-top:1.4rem; font-family:var(--font-label); font-size:0.72rem; letter-spacing:.35em; color:var(--gold);}
+
+#gallery{min-height:auto; padding:11vh 7vw;}
+.gallery-intro{max-width:30ch; font-size:1rem; color:var(--ink-soft); margin-top:-0.4rem; margin-bottom:2.6rem;}
+.gallery-grid{width:100%; max-width:420px; display:grid; grid-template-columns:1.1fr 1fr; grid-auto-rows:120px; gap:14px;}
+.g-frame{position:relative; background:var(--paper); border:1px solid var(--line); padding:8px; box-shadow:0 18px 36px -18px rgba(44,44,44,0.28);
+  opacity:0; transform:translateY(22px) scale(.97); transition:opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease;}
+.g-frame.is-visible{opacity:1; transform:translateY(0) scale(1);}
+.g-frame:active{transform:scale(0.98);}
+.g-frame .g-inner{position:relative; width:100%; height:100%; overflow:hidden;}
+.g-frame img{width:100%; height:100%; object-fit:cover; display:block; transition:transform 1.4s cubic-bezier(.2,.7,.2,1);}
+.g-frame:hover img{transform:scale(1.08);}
+.g-frame .g-fallback{display:none; width:100%; height:100%; align-items:center; justify-content:center;
+  background:linear-gradient(135deg, var(--blush-soft), var(--cream-deep)); font-family:var(--font-label); font-size:0.56rem;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); text-align:center; padding:0.6rem;}
+.g-caption{margin-top:8px; font-family:var(--font-script); font-size:1.05rem; color:var(--burgundy); text-align:center;}
+.g1{grid-column:1/2; grid-row:1/3;} .g2{grid-column:2/3; grid-row:1/2;} .g3{grid-column:2/3; grid-row:2/4;}
+.g4{grid-column:1/2; grid-row:3/4;} .g5{grid-column:1/3; grid-row:4/6;}
+
+#videoMoment{min-height:auto; padding:6vh 8vw 11vh;}
+.moment-script{font-family:var(--font-script); font-size:1.9rem; color:var(--burgundy); margin-top:0.4rem;}
+.moment-sub{max-width:32ch; font-size:1rem; color:var(--ink-soft); margin-top:0.7rem; margin-bottom:2rem;}
+.video-frame{width:100%; max-width:340px; aspect-ratio:9/16; background:linear-gradient(160deg, var(--blush-soft), var(--cream-deep));
+  border:1px solid var(--line); position:relative; box-shadow:0 26px 54px -20px rgba(44,44,44,0.32); overflow:hidden;}
+.video-frame video{width:100%; height:100%; object-fit:cover; display:block; position:relative; z-index:1;}
+.video-fallback{display:none; position:absolute; inset:0; align-items:center; justify-content:center; flex-direction:column; gap:0.6rem;
+  font-family:var(--font-label); font-size:0.62rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); text-align:center; padding:1rem;}
+
+.date-huge{font-family:var(--font-display); font-weight:400; font-size:clamp(3.4rem, 15vw, 5.6rem); line-height:.9; color:var(--gold);}
+.date-month{font-family:var(--font-label); letter-spacing:.5em; text-transform:uppercase; font-size:.9rem; margin-top:1.1rem; color:var(--charcoal);}
+.date-year{font-size:1.1rem; letter-spacing:.25em; color:var(--ink-soft); margin-top:.35rem;}
+.countdown{margin-top:2.4rem; display:flex; gap:1rem;}
+.countdown .unit{display:flex; flex-direction:column; align-items:center; min-width:48px;}
+.countdown .num{font-family:var(--font-display); font-weight:600; font-size:1.6rem; color:var(--burgundy);}
+.countdown .lbl{font-family:var(--font-label); font-size:.52rem; letter-spacing:.15em; text-transform:uppercase; color:var(--ink-soft); margin-top:.3rem;}
+
+.venue-name{font-family:var(--font-display); font-style:italic; font-size:clamp(1.7rem, 6.5vw, 2.3rem); color:var(--charcoal);}
+.venue-detail{margin-top:.9rem; font-size:1.02rem; color:var(--ink-soft); line-height:1.65;}
+.venue-time{margin-top:1.6rem; font-family:var(--font-label); font-size:.68rem; letter-spacing:.3em; text-transform:uppercase; color:var(--gold);}
+.map-link{margin-top:1.4rem; display:inline-block; font-size:.85rem; letter-spacing:.05em; color:var(--ink-soft); text-decoration:none; border-bottom:1px solid var(--gold-dim); padding-bottom:2px;}
+
+.timeline{text-align:left; max-width:300px; margin:2rem auto 0; position:relative; padding-left:26px;}
+.timeline::before{content:''; position:absolute; left:6px; top:6px; bottom:6px; width:1px; background:var(--line);}
+.timeline-item{position:relative; display:flex; align-items:baseline; gap:18px; padding:14px 0;}
+.timeline-item::before{content:''; position:absolute; left:-25px; top:20px; width:9px; height:9px; border-radius:50%; background:var(--gold); box-shadow:0 0 0 3px var(--cream);}
+.timeline-time{font-family:var(--font-display); font-weight:600; font-size:15px; color:var(--burgundy); width:58px; flex-shrink:0;}
+.timeline-event{font-family:var(--font-body); font-size:17px; color:var(--charcoal);}
+
+#rsvp{min-height:100svh;}
+.rsvp-title{font-family:var(--font-display); font-style:italic; font-size:clamp(1.9rem, 7vw, 2.6rem); color:var(--charcoal);}
+.rsvp-sub{margin-top:.75rem; font-size:.98rem; color:var(--ink-soft); max-width:32ch;}
+.rsvp-actions{margin-top:2.5rem; display:flex; flex-direction:column; gap:.9rem; width:100%; max-width:320px;}
+.rsvp-btn{font-family:var(--font-label); font-size:.78rem; letter-spacing:.22em; text-transform:uppercase; padding:1.05rem 1.4rem;
+  border:1px solid var(--gold); background:transparent; color:var(--charcoal); cursor:pointer;
+  transition:background .4s ease, color .4s ease, letter-spacing .4s ease, opacity .3s ease;}
+.rsvp-btn.primary{background:linear-gradient(180deg, var(--gold-bright), var(--gold)); color:#fffdf9; border-color:transparent;}
+.rsvp-btn:hover{letter-spacing:.3em;}
+.rsvp-btn.primary:hover{filter:brightness(1.05);}
+.rsvp-btn:not(.primary):hover{background:rgba(197,160,89,0.08);}
+.rsvp-btn:disabled{opacity:.4; cursor:not-allowed; letter-spacing:.22em;}
+.already-responded{margin-top:2.2rem; max-width:320px; font-family:var(--font-display); font-style:italic; font-size:1.15rem; color:var(--charcoal); line-height:1.6;}
+.already-responded .status-word{color:var(--burgundy); font-weight:600; font-style:normal;}
+.rsvp-note-wrap{margin-top:2.2rem; width:100%; max-width:320px; opacity:0; max-height:0; overflow:hidden; transition:opacity .5s ease, max-height .5s ease;}
+.rsvp-note-wrap.open{opacity:1; max-height:170px;}
+.rsvp-note-wrap textarea{width:100%; background:var(--paper); border:1px solid var(--line); color:var(--charcoal); font-family:var(--font-body); font-size:.95rem; padding:.8rem; resize:none; height:70px;}
+.rsvp-note-wrap button{margin-top:.7rem; font-family:var(--font-label); font-size:.68rem; letter-spacing:.2em; text-transform:uppercase; background:none; border:none; color:var(--gold); cursor:pointer; border-bottom:1px solid var(--gold-dim);}
+
+.response-modal{position:fixed; inset:0; z-index:200; display:flex; align-items:center; justify-content:center; padding:8vw;
+  background:rgba(44,44,44,0.0); opacity:0; visibility:hidden; pointer-events:none; transition:opacity .7s ease, background .7s ease, visibility .7s ease;}
+.response-modal.show{opacity:1; visibility:visible; pointer-events:auto; background:rgba(44,44,44,0.55);}
+.response-card{position:relative; max-width:420px; width:100%; background:var(--cream); border:1px solid var(--gold-dim);
+  box-shadow:0 40px 90px -20px rgba(0,0,0,0.5); padding:52px 30px 40px; text-align:center;
+  transform:scale(.85) translateY(30px); opacity:0; transition:transform .7s cubic-bezier(.2,.8,.2,1) .1s, opacity .6s ease .1s; overflow:hidden;}
+.response-modal.show .response-card{transform:scale(1) translateY(0); opacity:1;}
+.response-card::before{content:''; position:absolute; inset:8px; border:1px solid var(--gold-dim); pointer-events:none;}
+.response-icon{font-family:var(--font-script); font-size:2.6rem; color:var(--burgundy); position:relative; z-index:1;}
+.response-headline{font-family:var(--font-display); font-style:italic; font-weight:600; font-size:clamp(1.7rem,7vw,2.2rem); color:var(--charcoal); margin-top:.6rem; position:relative; z-index:1;}
+.response-body{font-size:1.05rem; color:var(--ink-soft); margin-top:1.1rem; line-height:1.7; max-width:30ch; margin-left:auto; margin-right:auto; position:relative; z-index:1;}
+.response-close{margin-top:2rem; font-family:var(--font-label); font-size:.68rem; letter-spacing:.25em; text-transform:uppercase;
+  background:none; border:1px solid var(--gold); color:var(--charcoal); padding:.8rem 1.8rem; cursor:pointer;
+  position:relative; z-index:1; transition:letter-spacing .4s ease, background .4s ease;}
+.response-close:hover{letter-spacing:.32em; background:rgba(197,160,89,0.08);}
+.confetti-piece{position:absolute; top:-10%; width:8px; height:14px; border-radius:1px; opacity:.9; z-index:0; animation:confettiFall linear forwards;}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg); opacity:1;} 100%{transform:translateY(520px) rotate(540deg); opacity:0;}}
+
+#musicToggle{position:fixed; top:18px; right:calc(50% - 250px + 18px); z-index:90; width:40px; height:40px; border-radius:50%;
+  border:1px solid var(--line); background:rgba(255,253,249,0.85); backdrop-filter:blur(4px);
+  display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0; transition:opacity .6s ease;}
+#musicToggle.show{opacity:1;}
+#musicToggle svg{width:16px; height:16px; fill:var(--gold);}
+@media (max-width:500px){#musicToggle{right:18px;}}
+
+footer{text-align:center; padding:5vh 8vw 8vh; font-family:var(--font-label); font-size:.6rem; letter-spacing:.3em; text-transform:uppercase; color:rgba(197,160,89,0.6);}
+::selection{background:var(--gold-dim);}
+@media (prefers-reduced-motion: reduce){.reveal, .g-frame{transition:none; opacity:1; transform:none;}}
+</style>
+</head>
+<body class="locked">
+
+<div class="video-scene" id="videoScene">
+  <video id="envelopeVideo" src="envelope.mp4" playsinline preload="auto"></video>
+</div>
+
+<div id="musicToggle" title="Toggle music">
+  <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+</div>
+<!-- RED FLAG: place a file named song.mp3 next to this HTML file for background music -->
+<audio id="bgMusic" loop preload="none">
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<div class="stage">
+
+  <section id="welcome">
+    <div class="reveal in">
+      <div class="eyebrow">An Invitation Prepared For</div>
+      <div class="guest-name" id="guestName">Our Cherished Guest</div>
+      <div class="seal-sub">You are warmly invited to witness our vow</div>
+    </div>
+  </section>
+
+  <section id="announce">
+    <div class="eyebrow reveal d1">Together with their families</div>
+    <h1 class="names reveal d2">
+      Zohan
+      <span class="amp">&amp;</span>
+      Rose
+    </h1>
+    <div class="rule wide reveal d3"></div>
+    <p class="together reveal d4">request the honour of your presence as they exchange vows and begin their forever</p>
+    <div class="date-chip reveal d4">27 · 09 · 2026</div>
+  </section>
+
+  <section id="gallery">
+    <div class="eyebrow reveal d1">Our Story</div>
+    <p class="gallery-intro reveal d1">A few frames from the journey that brought us here</p>
+    <div class="gallery-grid">
+      <figure class="g-frame g1" data-idx="0"><div class="g-inner"><img src="pic1.png" alt="Zohan and Rose" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="g-fallback">pic1.png</div></div><figcaption class="g-caption">Where it began</figcaption></figure>
+      <figure class="g-frame g2" data-idx="1"><div class="g-inner"><img src="pic2.png" alt="Zohan and Rose" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="g-fallback">pic2.png</div></div><figcaption class="g-caption">Late nights, long talks</figcaption></figure>
+      <figure class="g-frame g3" data-idx="2"><div class="g-inner"><img src="pic3.png" alt="Zohan and Rose" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="g-fallback">pic3.png</div></div><figcaption class="g-caption">Home, wherever we are</figcaption></figure>
+      <figure class="g-frame g4" data-idx="3"><div class="g-inner"><img src="pic4.png" alt="Zohan and Rose" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="g-fallback">pic4.png</div></div><figcaption class="g-caption">Every ordinary day</figcaption></figure>
+      <figure class="g-frame g5" data-idx="4"><div class="g-inner"><img src="pic5.png" alt="Zohan and Rose" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="g-fallback">pic5.png</div></div><figcaption class="g-caption">Then, forever</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="videoMoment">
+    <div class="eyebrow reveal d1">In Case You Missed It</div>
+    <div class="moment-script reveal d2">The Proposal</div>
+    <p class="moment-sub reveal d2">Rose said yes — obviously. Here's how it happened, in case you weren't there to see it for yourself.</p>
+    <div class="video-frame reveal d3" id="videoFrame">
+      <video id="momentVideo" src="vid1.mp4" controls playsinline preload="metadata"></video>
+      <div class="video-fallback" id="videoFallback">
+        <span>Add vid1.mp4 to this folder</span>
+        <span>to show the proposal here</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="date">
+    <div class="eyebrow reveal d1">Save the Date</div>
+    <div class="date-huge reveal d2">27</div>
+    <div class="date-month reveal d3">September</div>
+    <div class="date-year reveal d3">2026</div>
+    <div class="countdown reveal d4">
+      <div class="unit"><div class="num" id="cd-days">--</div><div class="lbl">Days</div></div>
+      <div class="unit"><div class="num" id="cd-hrs">--</div><div class="lbl">Hours</div></div>
+      <div class="unit"><div class="num" id="cd-min">--</div><div class="lbl">Minutes</div></div>
+      <div class="unit"><div class="num" id="cd-sec">--</div><div class="lbl">Seconds</div></div>
+    </div>
+  </section>
+
+  <section id="ceremony">
+    <div class="eyebrow reveal d1">The Nikkah</div>
+    <div class="venue-name reveal d2">The Rose Garden Hall</div>
+    <div class="venue-detail reveal d3">Lilongwe, Malawi<br>Nikkah Ceremony &amp; Exchange of Vows</div>
+    <div class="rule reveal d3"></div>
+    <div class="venue-time reveal d4">6:00 PM &nbsp;·&nbsp; Please Be Seated by 5:45&nbsp;PM</div>
+    <a class="map-link reveal d4" href="#" id="churchMapLink" target="_blank" rel="noopener">View location</a>
+    <div class="timeline reveal d4">
+      <div class="timeline-item"><div class="timeline-time">5 PM</div><div class="timeline-event">Guest Arrivals</div></div>
+      <div class="timeline-item"><div class="timeline-time">6 PM</div><div class="timeline-event">Nikkah Ceremony</div></div>
+      <div class="timeline-item"><div class="timeline-time">7 PM</div><div class="timeline-event">Mocktail Hour</div></div>
+    </div>
+  </section>
+
+  <section id="venue">
+    <div class="eyebrow reveal d1">The Celebration</div>
+    <div class="venue-name reveal d2">Sunbird Capital Hotel</div>
+    <div class="venue-detail reveal d3">City Centre, Lilongwe, Malawi</div>
+    <div class="rule reveal d3"></div>
+    <div class="venue-time reveal d4">Reception · 7:00 PM Onward</div>
+    <a class="map-link reveal d4" href="#" id="mapLink" target="_blank" rel="noopener">View location</a>
+  </section>
+
+  <section id="rsvp">
+    <div class="eyebrow reveal d1">Kindly Respond</div>
+    <div class="rsvp-title reveal d2">Will you join us?</div>
+    <p class="rsvp-sub reveal d2">We've reserved a seat in your name. Please let us know by 27 August 2026.</p>
+    <div class="rsvp-actions reveal d3" id="rsvpActions">
+      <button class="rsvp-btn primary" id="btnYes">Joyfully Accept</button>
+      <button class="rsvp-btn" id="btnNo">Regretfully Decline</button>
+    </div>
+    <div class="already-responded" id="alreadyResponded" style="display:none;"></div>
+    <div class="rsvp-note-wrap" id="noteWrap">
+      <textarea id="noteText" placeholder="A note for the couple (optional)"></textarea>
+      <button id="sendNote">Send note →</button>
+    </div>
+  </section>
+
+  <footer>Zohan &amp; Rose &nbsp;·&nbsp; 27.09.2026</footer>
+
+</div>
+
+<div class="response-modal" id="responseModal">
+  <div class="response-card" id="responseCard">
+    <div class="response-icon" id="responseIcon">&amp;</div>
+    <div class="response-headline" id="responseHeadline"></div>
+    <p class="response-body" id="responseBody"></p>
+    <button class="response-close" id="responseClose">Close</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const ENDPOINT_URL = '';
+
+  const params = new URLSearchParams(window.location.search);
+  const guestRaw = params.get('Name') || params.get('to');
+  const code = params.get('Code') || '';
+  const guestName = guestRaw ? guestRaw.replace(/\+/g,' ') : 'Our Cherished Guest';
+  const rsvpKey = 'zr-rsvp-' + (code || guestName).toLowerCase().replace(/\s+/g,'-');
+
+  document.getElementById('guestName').textContent = guestName;
+
+  const videoScene = document.getElementById('videoScene');
+  const envelopeVideo = document.getElementById('envelopeVideo');
+  const stage = document.querySelector('.stage');
+  const body = document.body;
+  const musicToggle = document.getElementById('musicToggle');
+  const bgMusic = document.getElementById('bgMusic');
+  let started = false;
+
+  function startBgMusic(){
+    bgMusic.volume = 0.35;
+    bgMusic.play().then(()=>{ musicToggle.classList.add('show'); }).catch(()=>{
+      musicToggle.classList.add('show');
+    });
+  }
+
+  function revealInvitation(){
+    videoScene.classList.add('hide');
+    startBgMusic();
+    setTimeout(()=>{
+      body.classList.remove('locked');
+      videoScene.style.display = 'none';
+      logRSVP('viewed');
+    }, 700);
+  }
+
+  videoScene.addEventListener('click', ()=>{
+    if(started) return;
+    started = true;
+    envelopeVideo.play().catch(()=>{ revealInvitation(); });
+  });
+  envelopeVideo.addEventListener('ended', revealInvitation);
+
+  musicToggle.addEventListener('click', ()=>{
+    if(bgMusic.paused){ bgMusic.play().catch(()=>{}); }
+    else{ bgMusic.pause(); }
+  });
+
+  const momentVideo = document.getElementById('momentVideo');
+  const videoFallback = document.getElementById('videoFallback');
+  let musicWasPlaying = false;
+
+  momentVideo.addEventListener('error', ()=>{
+    momentVideo.style.display = 'none';
+    videoFallback.style.display = 'flex';
+  });
+  momentVideo.addEventListener('play', ()=>{
+    musicWasPlaying = !bgMusic.paused;
+    if(!bgMusic.paused){ bgMusic.pause(); }
+  });
+  momentVideo.addEventListener('ended', ()=>{
+    if(musicWasPlaying){ bgMusic.play().catch(()=>{}); }
+  });
+
+  const revealEls = document.querySelectorAll('.reveal:not(.in)');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); } });
+  }, { threshold: 0.3 });
+  revealEls.forEach(el=>io.observe(el));
+
+  const galleryFrames = document.querySelectorAll('.g-frame');
+  const gio = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const idx = parseInt(e.target.dataset.idx || '0', 10);
+        setTimeout(()=>e.target.classList.add('is-visible'), idx * 120);
+        gio.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  galleryFrames.forEach(el=>gio.observe(el));
+
+  const target = new Date('2026-09-27T18:00:00');
+  function tick(){
+    const now = new Date();
+    let diff = target - now;
+    if(diff < 0) diff = 0;
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cd-days').textContent = d;
+    document.getElementById('cd-hrs').textContent = String(h).padStart(2,'0');
+    document.getElementById('cd-min').textContent = String(m).padStart(2,'0');
+    document.getElementById('cd-sec').textContent = String(s).padStart(2,'0');
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  document.getElementById('churchMapLink').href = 'https://maps.google.com/?q=Lilongwe+Malawi';
+  document.getElementById('mapLink').href = 'https://maps.google.com/?q=Sunbird+Capital+Hotel+Lilongwe+Malawi';
+
+  function logRSVP(status, note){
+    const payload = { guest: guestName, code: code, status: status, note: note || '', wedding: 'zohan-rose-2026' };
+    console.log('[RSVP EVENT]', payload);
+    if (ENDPOINT_URL && ENDPOINT_URL.indexOf('script.google.com') !== -1){
+      fetch(ENDPOINT_URL, {
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify(payload)
+      }).then(r=>r.json()).then(d=>console.log('RSVP sent', d)).catch(err=>console.warn('RSVP send failed', err));
+    }
+  }
+
+  const rsvpActions = document.getElementById('rsvpActions');
+  const alreadyResponded = document.getElementById('alreadyResponded');
+  const noteWrap = document.getElementById('noteWrap');
+  const btnYes = document.getElementById('btnYes');
+  const btnNo = document.getElementById('btnNo');
+  const modal = document.getElementById('responseModal');
+  const responseIcon = document.getElementById('responseIcon');
+  const responseHeadline = document.getElementById('responseHeadline');
+  const responseBody = document.getElementById('responseBody');
+  const responseClose = document.getElementById('responseClose');
+
+  function getSavedResponse(){
+    try{ const raw = localStorage.getItem(rsvpKey); return raw ? JSON.parse(raw) : null; }catch(e){ return null; }
+  }
+  function saveResponse(status, note){
+    try{ localStorage.setItem(rsvpKey, JSON.stringify({ status:status, note:note || '', ts:Date.now() })); }catch(e){}
+  }
+
+  function showAlreadyResponded(saved){
+    rsvpActions.style.display = 'none';
+    noteWrap.classList.remove('open');
+    const word = saved.status === 'accepted' ? 'Joyfully Accepted' : 'Regretfully Declined';
+    alreadyResponded.innerHTML = "But you've already given us your response, <span class=\"status-word\">" + guestName + "</span> — you <span class=\"status-word\">" + word + "</span>. Thank you for letting us know.";
+    alreadyResponded.style.display = 'block';
+  }
+
+  function launchConfetti(){
+    const colors = ['#c5a059','#d8bc82','#6b151e','#e7c3c6'];
+    for(let i=0;i<26;i++){
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = (Math.random()*100) + '%';
+      piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+      piece.style.animationDuration = (2.2 + Math.random()*1.6) + 's';
+      piece.style.animationDelay = (Math.random()*0.4) + 's';
+      piece.style.transform = 'rotate(' + Math.floor(Math.random()*360) + 'deg)';
+      document.getElementById('responseCard').appendChild(piece);
+      setTimeout(()=>piece.remove(), 4200);
+    }
+  }
+
+  function openModal(status){
+    if(status === 'accepted'){
+      responseIcon.textContent = '❦';
+      responseHeadline.textContent = 'Joyfully Accepted';
+      responseBody.textContent = "Wonderful — we can't wait to celebrate with you, " + guestName + ". Save the date, and get ready to dance.";
+      launchConfetti();
+    } else {
+      responseIcon.textContent = '❧';
+      responseHeadline.textContent = 'We Will Miss You';
+      responseBody.textContent = "Thank you for letting us know, " + guestName + ". You'll be in our hearts on the day — we'll raise a toast to you.";
+    }
+    modal.classList.add('show');
+  }
+  responseClose.addEventListener('click', ()=>{ modal.classList.remove('show'); });
+
+  function submitResponse(status){
+    const existing = getSavedResponse();
+    if(existing){ showAlreadyResponded(existing); return; }
+    btnYes.disabled = true;
+    btnNo.disabled = true;
+    saveResponse(status);
+    logRSVP(status);
+    openModal(status);
+    noteWrap.classList.add('open');
+    setTimeout(()=>{ showAlreadyResponded({ status:status }); }, 400);
+  }
+
+  btnYes.addEventListener('click', ()=>submitResponse('accepted'));
+  btnNo.addEventListener('click', ()=>submitResponse('declined'));
+
+  document.getElementById('sendNote').addEventListener('click', ()=>{
+    const note = document.getElementById('noteText').value.trim();
+    if(note){
+      const saved = getSavedResponse();
+      logRSVP((saved && saved.status) || 'note', note);
+      if(saved){ saved.note = note; try{ localStorage.setItem(rsvpKey, JSON.stringify(saved)); }catch(e){} }
+      document.getElementById('noteText').value = '';
+      const btn = document.getElementById('sendNote');
+      btn.textContent = 'Sent ✓';
+      setTimeout(()=>{ btn.textContent = 'Send note →'; }, 2000);
+    }
+  });
+
+  const existingResponse = getSavedResponse();
+  if(existingResponse){ showAlreadyResponded(existingResponse); }
+})();
+</script>
+
+</body>
+</html>
