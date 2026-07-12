@@ -295,7 +295,7 @@ footer{text-align:center; padding:5vh 8vw 8vh; font-family:var(--font-label); fo
   // This page already sends { guest, code, status, note, wedding } on every "viewed",
   // "accepted", "declined", and note event — which is exactly what your Register/RSVPs
   // Apps Script backend expects. Nothing else needs to change once this is set.
-  const ENDPOINT_URL = '';
+  const ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbyLGuW4XvIMGBpfdbx1IzOs-f5ZfEP3wNltH3bS7slXbU6bNz-qJreTJDAY45ZXvT-jrA/exec';
 
   const params = new URLSearchParams(window.location.search);
   const guestRaw = params.get('Name') || params.get('to');
@@ -406,7 +406,7 @@ footer{text-align:center; padding:5vh 8vw 8vh; font-family:var(--font-label); fo
   setInterval(tick, 1000);
 
   document.getElementById('churchMapLink').href = 'https://maps.app.goo.gl/dYdKCVwQRt2qJKaf7';
-  document.getElementById('mapLink').href = 'https://maps.google.com/?q=Sunbird+Capital+Hotel+Lilongwe+Malawi';
+  document.getElementById('mapLink').href = 'https://maps.app.goo.gl/GkDG9dPrPetqe9kW6';
 
   function logRSVP(status, note){
     const payload = { guest: guestName, code: code, status: status, note: note || '', wedding: 'thandi-chris-2026' };
