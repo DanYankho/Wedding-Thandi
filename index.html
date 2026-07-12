@@ -291,6 +291,10 @@ footer{text-align:center; padding:5vh 8vw 8vh; font-family:var(--font-label); fo
 
 <script>
 (function(){
+  // RED FLAG: paste your Apps Script Web App URL here (Deploy → New deployment → Web app).
+  // This page already sends { guest, code, status, note, wedding } on every "viewed",
+  // "accepted", "declined", and note event — which is exactly what your Register/RSVPs
+  // Apps Script backend expects. Nothing else needs to change once this is set.
   const ENDPOINT_URL = '';
 
   const params = new URLSearchParams(window.location.search);
